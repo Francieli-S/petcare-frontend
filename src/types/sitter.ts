@@ -6,3 +6,10 @@ export interface Sitter {
   bio: string;
   rating: number;
 };
+
+export interface SitterContextType {
+  isSitter: boolean;
+  setIsSitter: (value: boolean) => void;
+  sitterData: any | null; // You can type this according to your sitter interface
+  refreshSitterStatus: () => Promise<void>;
+}
