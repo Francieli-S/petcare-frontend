@@ -2,20 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;600;700&display=swap');
+
+/* Define your color palette as CSS custom properties */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #b94629;   /* Warm, earthy red */
+  --color-secondary: #e3dec1; /* Soft neutral/beige */
+  --color-accent: #e89f65;    /* Warm, peachy tone */
+  --color-info: #47afaf;      /* Cool, refreshing teal */
+  --color-white: #ffffff;     /* Crisp white */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Global Base Styles */
+html,
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Use Lato for body text */
+  font-family: 'Lato', sans-serif;
+  background-color: var(--color-secondary);
+  color: #333;
+  line-height: 1.6;
 }
+
+/* Headings use Poppins for a modern, friendly look */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-primary);
+  margin-bottom: 0.5em;
+}
+
+/* Body text */
+p {
+  margin-bottom: 1em;
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Button Utility Classes */
+.btn-primary {
+  @apply bg-[var(--color-primary)] text-white py-2 px-4 rounded;
+}
+
+.btn-secondary {
+  @apply bg-[var(--color-accent)] text-white py-2 px-4 rounded;
+}
+
+/* Form Inputs */
+input,
+textarea,
+select {
+  @apply border border-gray-300 rounded p-2;
+}
+
+/* Additional Utilities */
+.container {
+  @apply max-w-7xl mx-auto px-4;
+}
+
+/* Example Card Component Styling */
+.card {
+  @apply bg-white shadow-md rounded-lg p-6;
+}
+
+/* Spacing Utilities (if needed) */
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+/* Feel free to add any custom styles that match the pet care, clean, and trustworthy design aesthetic */
+
