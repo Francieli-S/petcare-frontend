@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      apiRequest('/users/profile', 'GET')
+      apiRequest('/users/profile')
         .then((data) => {
           setUser(data.user);
         })
