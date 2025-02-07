@@ -3,13 +3,17 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { apiRequest } from "@/utils/api";
+import { useSitter } from "@/context/SitterContext";
 import { Booking } from "@/types/booking"; // Make sure this interface is defined
 
 export default function BookingDetailsPage() {
   const { id } = useParams(); // Retrieves the booking ID from the URL
+  const { isSitter } = useSitter();
   const [booking, setBooking] = useState<Booking | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  console.log('BOOKING ID: ', id);
 
   useEffect(() => {
     if (!id) return; // If no ID is present, do nothing
@@ -19,8 +23,7 @@ export default function BookingDetailsPage() {
     const fetchBooking = async () => {
       try {
         setLoading(true);
-        // Call the API to get booking details by id
-        const data = await apiRequest(`/bookings/${id}`, "GET");
+        const data = await apiRequest(`/bookings/${id}`);
         console.log('BOOKING BY ID: ', data.booking);
         if (isMounted) {
           setBooking(data.booking);
@@ -69,41 +72,33 @@ export default function BookingDetailsPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-lg">
-      {/* Booking Details Heading */}
       <h1 className="text-3xl font-bold text-[var(--color-primary)] mb-6 text-center">
         Booking Details
       </h1>
 
-      {/* Booking ID */}
-      <p className="text-gray-700 mb-4">
-        <strong>Booking ID:</strong> {booking.bookingId}
+      <p className='text-gray-700 mb-4'>
+        <strong>Status:</strong> <br />{booking.status}
       </p>
 
-      {/* Booking Status */}
-      <p className="text-gray-700 mb-4">
-        <strong>Status:</strong> {booking.status}
+      <p className='text-gray-700 mb-4'>
+        <strong>Service Type:</strong> <br />{booking.serviceType}
       </p>
 
-      {/* Total Cost */}
-      <p className="text-gray-700 mb-4">
-        <strong>Total Cost:</strong> ${booking.totalCost.toFixed(2)}
+      <p className='text-gray-700 mb-4'>
+        <strong>Number of days:</strong> <br />{booking.numberOfDays}
       </p>
 
-      {/* Optional: Display Service Type if available */}
-      {booking.serviceType && (
-        <p className="text-gray-700 mb-4">
-          <strong>Service Type:</strong> {booking.serviceType}
-        </p>
-      )}
+      <p className='text-gray-700 mb-4'>
+        <strong>Total Cost:</strong> € <br />{booking.totalCost.toFixed(2)}
+      </p>
 
-      {/* Optional: Display Number of Days if available */}
-      {booking.numberOfDays && (
-        <p className="text-gray-700 mb-4">
-          <strong>Number of Days:</strong> {booking.numberOfDays}
-        </p>
-      )}
+      <p className='text-gray-700 mb-4'>
+        <strong>Sitter</strong> <br />{booking.sitter.firstName}
+      </p>
 
-      {/* Additional fields can be added here as needed */}
+      <p className='mt-2 text-gray-600'>
+        <strong>Booking ref:</strong> <br />{booking.bookingId}
+      </p>
     </div>
   );
 }

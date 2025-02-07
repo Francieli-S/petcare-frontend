@@ -23,13 +23,13 @@ export default function SitterForm({ onClose }: SitterFormProps) {
 
     try {
       // Call the /sitter POST endpoint with the bio
-      const response = await apiRequest("/sitter", "POST", { bio });
+      const response = await apiRequest("/sitters", "POST", { bio });
 
       // Check for success in your response structure (adjust if needed)
       if (response) {
         setConfirmation("Sitter profile created successfully!");
         // Optionally, you can redirect to a sitter dashboard or update user data
-        // router.push("/profile/dashboard/sitter");
+        router.push("/profile");
       } else {
         setError("Failed to create sitter profile.");
       }

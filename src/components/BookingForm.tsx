@@ -23,14 +23,15 @@ export default function BookingForm({ sitterId, onClose }: BookingFormProps) {
     setError(null);
 
     try {
-      // Send the POST request with sitterId, serviceType, and numberOfDays
+      
       const response = await apiRequest("/bookings", "POST", {
         sitterId,
         serviceType,
         numberOfDays,
       });
 
-      if (response.success) {
+      if (response.booking) {
+        console.log('BOOKING RESPONSE: ', response.booking);
         setBookingSuccess(true);
       } else {
         setError("Failed to create booking.");
