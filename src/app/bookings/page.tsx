@@ -38,21 +38,25 @@ export default function BookingsPage() {
     };
   }, []);
 
-  if (loading) return <p className="text-center mt-10">Loading bookings...</p>;
-  if (error) return <p className="text-red-500 text-center">{error}</p>;
-  if (bookings.length === 0) return <p className="text-center mt-10">No bookings found.</p>;
+  if (loading)
+    return <p className="text-center mt-10 text-lg">Loading bookings...</p>;
+  if (error)
+    return <p className="text-red-500 text-center mt-10 text-lg">{error}</p>;
+  if (bookings.length === 0)
+    return <p className="text-center mt-10 text-lg">No bookings found.</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">My Bookings</h1>
-      <div className="space-y-4">
+      <h1 className="text-3xl font-bold text-center text-[var(--color-primary)] mb-6">
+        My Bookings
+      </h1>
+      <div className="space-y-6">
         {bookings.map((booking) => (
           <BookingCard
             key={booking.bookingId}
             booking={booking}
-            // sitter={booking.sitterId}       // Pass the sitter info (if it is a property on booking)
-            totalCost={booking.totalCost} // Pass the totalCost property
-            status={booking.status}       // Pass the status property
+            totalCost={booking.totalCost}
+            status={booking.status}
           />
         ))}
       </div>

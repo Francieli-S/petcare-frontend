@@ -13,22 +13,34 @@ interface BookingCardProps {
 
 export default function BookingCard({
   booking,
-  //sitter,
+  // sitter,
   totalCost,
   status,
 }: BookingCardProps) {
   return (
-    <div className="p-4 border rounded-lg shadow-md bg-white">
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      {/* Uncomment the following line to display sitter's name if available */}
       {/* <h2 className="text-xl font-bold mb-2">Booking for {sitter.name}</h2> */}
-      <p><strong>Status:</strong> {status}</p>
-      <p><strong>Total Cost:</strong> ${totalCost.toFixed(2)}</p>
+      
+      <p className="text-gray-700 mb-2">
+        <strong>Status:</strong> {status}
+      </p>
+      
+      <p className="text-gray-700 mb-2">
+        <strong>Total Cost:</strong> ${totalCost.toFixed(2)}
+      </p>
+      
       {/* Render other booking details as needed */}
       <p className="mt-2 text-gray-600">
-        Booking ID: {booking.bookingId}
+        <strong>Booking ID:</strong> {booking.bookingId}
       </p>
+      
       <Link href={`/booking/${booking.bookingId}`}>
-        <button>View booking</button>
+        <button className="mt-4 w-full py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-accent)] transition-colors">
+          View Booking
+        </button>
       </Link>
     </div>
   );
 }
+

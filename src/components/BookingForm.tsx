@@ -49,56 +49,62 @@ export default function BookingForm({ sitterId, onClose }: BookingFormProps) {
   };
 
   return (
-    <div className="mt-4 p-4 border rounded-lg bg-gray-100">
-      <h3 className="text-lg font-semibold">Book this Sitter</h3>
+    <div className="mt-4 p-6 border border-gray-300 rounded-lg bg-white shadow-md">
+      <h3 className="text-lg font-semibold text-[var(--color-primary)] mb-4">
+        Book this Sitter
+      </h3>
 
       {bookingSuccess ? (
         <>
-          <p className="mt-2 text-green-600 font-medium">Booking successful!</p>
+          <p className="mt-2 text-green-600 font-medium">
+            Booking successful!
+          </p>
           <button
             onClick={handleSeeBookings}
-            className="w-full mt-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            className="w-full mt-4 py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-accent)] transition-colors"
           >
             See My Bookings
           </button>
         </>
       ) : (
         <>
-          <label className="block mt-2">
-            <span>Service Type:</span>
+          <label className="block mt-4">
+            <span className="font-medium text-gray-700">Service Type:</span>
             <input
               type="text"
               value={serviceType}
               onChange={(e) => setServiceType(e.target.value)}
-              className="w-full p-2 border rounded"
               placeholder="e.g., Dog walking, overnight care"
+              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
             />
           </label>
 
-          <label className="block mt-2">
-            <span>Number of Days:</span>
+          <label className="block mt-4">
+            <span className="font-medium text-gray-700">Number of Days:</span>
             <input
               type="number"
               min="1"
               value={numberOfDays}
               onChange={(e) => setNumberOfDays(Number(e.target.value))}
-              className="w-full p-2 border rounded"
+              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
             />
           </label>
 
-          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {error && (
+            <p className="text-red-500 mt-4">{error}</p>
+          )}
 
           <button
             onClick={handleBooking}
             disabled={loading}
-            className="w-full mt-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="w-full mt-6 py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-accent)] transition-colors"
           >
             {loading ? "Booking..." : "Confirm Booking"}
           </button>
 
           <button
             onClick={onClose}
-            className="w-full mt-2 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
+            className="w-full mt-4 py-3 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-colors"
           >
             Cancel
           </button>
@@ -107,3 +113,4 @@ export default function BookingForm({ sitterId, onClose }: BookingFormProps) {
     </div>
   );
 }
+
