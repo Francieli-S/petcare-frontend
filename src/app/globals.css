@@ -7,9 +7,9 @@
 
 /* Define your color palette as CSS custom properties */
 :root {
-  --color-primary: #b94629;   /* Warm, earthy red */
-  --color-secondary: #e3dec1; /* Soft neutral/beige */
-  --color-accent: #e89f65;    /* Warm, peachy tone */
+  --color-primary: #097a8e;   /* Warm, earthy red */
+  --color-secondary: #e3f8f8; /* Soft neutral/beige */
+  --color-accent: #ee4e8e;    /* Warm, peachy tone */
   --color-info: #47afaf;      /* Cool, refreshing teal */
   --color-white: #ffffff;     /* Crisp white */
 }

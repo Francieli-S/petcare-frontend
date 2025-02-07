@@ -42,36 +42,43 @@ export default function SitterForm({ onClose }: SitterFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded-lg bg-gray-100">
-      <h3 className="text-lg font-semibold mb-2">Sitter Profile Form</h3>
+    <form
+      onSubmit={handleSubmit}
+      className="p-6 border border-gray-300 rounded-lg bg-white shadow-md"
+    >
+      <h3 className="text-lg font-semibold text-[var(--color-primary)] mb-4">
+        Sitter Profile Form
+      </h3>
 
-      <label className="block mt-2">
-        <span className="font-medium">Bio:</span>
+      <label className="block mt-4">
+        <span className="font-medium text-gray-700">Bio:</span>
         <textarea
           value={bio}
           onChange={(e) => setBio(e.target.value)}
-          className="w-full p-2 border rounded mt-1"
+          className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
           placeholder="Tell us about your experience and services..."
           rows={4}
           required
         />
       </label>
 
-      {error && <p className="text-red-500 mt-2">{error}</p>}
-      {confirmation && <p className="text-green-600 mt-2">{confirmation}</p>}
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {confirmation && (
+        <p className="text-green-600 mt-4 font-medium">{confirmation}</p>
+      )}
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-6 flex gap-4">
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex-1 py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-accent)] transition-colors"
         >
           {loading ? "Submitting..." : "Submit"}
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="flex-1 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+          className="flex-1 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
         >
           Cancel
         </button>
@@ -79,3 +86,4 @@ export default function SitterForm({ onClose }: SitterFormProps) {
     </form>
   );
 }
+
