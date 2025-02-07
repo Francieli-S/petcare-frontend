@@ -8,8 +8,8 @@
 /* Define your color palette as CSS custom properties */
 :root {
   --color-primary: #097a8e;   /* Warm, earthy red */
-  --color-secondary: #e3f8f8; /* Soft neutral/beige */
-  --color-accent: #ee4e8e;    /* Warm, peachy tone */
+  --color-secondary: #f7fbfb; /* Soft neutral/beige */
+  --color-accent: #ef5b97;    /* Warm, peachy tone */
   --color-info: #47afaf;      /* Cool, refreshing teal */
   --color-white: #ffffff;     /* Crisp white */
 }
@@ -83,5 +83,4 @@ select {
   margin-bottom: 1rem;
 }
 
-/* Feel free to add any custom styles that match the pet care, clean, and trustworthy design aesthetic */
 
