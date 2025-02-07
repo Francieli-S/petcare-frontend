@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import SitterForm from '../../components/SitterForm';
-import { useSitter } from '@/context/SitterContext';
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import SitterForm from "../../components/SitterForm";
+import { useSitter } from "@/context/SitterContext";
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
@@ -12,73 +12,111 @@ export default function ProfilePage() {
   const router = useRouter();
   const [showSitterForm, setShowSitterForm] = useState(false);
 
+  console.log("IS SITTER: ", isSitter);
+  console.log("SITTER DATA: ", sitterData);
+
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/auth/login');
+      router.push("/auth/login"); // Redirect to login if user is not authenticated
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, isSitter, sitterData]);
 
   if (loading) {
-    return <p className='text-center mt-10 text-lg'>Loading...</p>;
+    return (
+      <p className="text-center mt-10 text-lg text-[var(--color-primary)]">
+        Loading...
+      </p>
+    );
   }
 
   if (!user) return null;
 
   return (
-    <main className="max-w-3xl mx-auto mt-10 p-6 border rounded-lg shadow-lg bg-white">
-      <h1 className="text-2xl font-bold mb-4">Welcome, {user.firstName}!</h1>
-      <p className="text-gray-700">Email: {user.email}</p>
+    <main className="container mt-10">
+      {/* Profile Card */}
+      <div className="card">
+        <h1 className="text-3xl font-bold">Welcome, {user.firstName}!</h1>
 
-      <section className="mt-6">
-        <h2 className="text-xl font-semibold">Your Dashboard</h2>
-        <ul className="mt-4 list-disc pl-5 space-y-2">
-          <li>
-            📅 <a href="/bookings" className="text-blue-600">My Bookings</a>
-          </li>
-          <li>
-            🐶 <a href="/pets" className="text-blue-600">My Pets</a>
-          </li>
-          <li>
-            ❤️ <a href="/favorites" className="text-blue-600">My Favorite Sitters</a>
-          </li>
-          {isSitter && (
-            <>
-              <li>
-                🐾 <a href="/clients" className="text-blue-600">My Clients</a>
-              </li>
-              <li>
-                ⭐ <a href="/reviews" className="text-blue-600">My Reviews</a>
-              </li>
-              <li>
-                📝 <a href="/sitter-bio" className="text-blue-600">My Bio: {sitterData.bio}</a>
-              </li>
-            </>
-          )}
-        </ul>
-      </section>
-
-      {/* Become a Sitter Section */}
-      {!isSitter && (
-        <section className="mt-8">
-          <button
-            onClick={() => setShowSitterForm((prev) => !prev)}
-            className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
-            {showSitterForm ? "Hide Sitter Form" : "Become a Sitter"}
-          </button>
-
-          {showSitterForm && (
-            <div className="mt-4">
-              <SitterForm
-                onClose={async () => {
-                  setShowSitterForm(false);
-                  await refreshSitterStatus(); // refresh global sitter state after creating a sitter
-                }}
-              />
-            </div>
-          )}
+        {/* User Dashboard */}
+        <section className="mt-6">
+          <h2 className="text-xl font-semibold">Your Dashboard</h2>
+          <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-700">
+            <li>
+              📅{" "}
+              <a href="/bookings" className="hover:text-[var(--color-accent)]">
+                My Bookings
+              </a>
+            </li>
+            <li>
+              🐶{" "}
+              <a href="/pets" className="hover:text-[var(--color-accent)]">
+                My Pets
+              </a>
+            </li>
+            <li>
+              ❤️{" "}
+              <a href="/favorites" className="hover:text-[var(--color-accent)]">
+                My Favorite Sitters
+              </a>
+            </li>
+          </ul>
         </section>
-      )}
+
+        {/* Sitter Dashboard (Visible only for sitters) */}
+        {isSitter && (
+          <section className="mt-6">
+            <h2 className="text-xl font-semibold">Sitter Dashboard</h2>
+            <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-700">
+              <li>
+                🐾{" "}
+                <a href="/clients" className="hover:text-[var(--color-accent)]">
+                  My Clients
+                </a>
+              </li>
+              <li>
+                ⭐{" "}
+                <a href="/reviews" className="hover:text-[var(--color-accent)]">
+                  My Reviews
+                </a>
+              </li>
+              <li>
+                📝{" "}
+                <a
+                  href="/sitter-bio"
+                  className="hover:text-[var(--color-accent)]"
+                >
+                  My Bio
+                </a>
+              </li>
+            </ul>
+          </section>
+        )}
+
+        {/* Become a Sitter Section */}
+        {!isSitter && (
+          <section className="mt-8">
+            <button
+              onClick={() => setShowSitterForm((prev) => !prev)}
+              className="btn-primary w-full hover:bg-[var(--color-accent)] transition duration-300"
+            >
+              {showSitterForm ? "Hide Sitter Form" : "Become a Sitter"}
+            </button>
+
+            {showSitterForm && (
+              <div className="mt-4">
+                <SitterForm
+                  onClose={async () => {
+                    setShowSitterForm(false);
+                    await refreshSitterStatus(); // Refresh global sitter state after submission
+                  }}
+                />
+              </div>
+            )}
+          </section>
+        )}
+      </div>
     </main>
   );
 }
+
+
