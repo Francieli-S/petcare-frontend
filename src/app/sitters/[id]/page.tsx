@@ -15,42 +15,74 @@ export default function SitterProfile() {
 
   useEffect(() => {
     if (!id) return; // Ensure ID exists
+    let isMounted = true; // Prevent state updates after unmounting
 
     const fetchSitter = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const data = await apiRequest(`/sitters/${id}`);
-        console.log('SITTER BY ID: ', data.sitter);
-        setSitter(data.sitter);
+        if (isMounted) {
+          setSitter(data.sitter);
+        }
       } catch (err) {
-        setError('Failed to load sitter details.');
+        if (isMounted) setError('Failed to load sitter details.');
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchSitter();
+    return () => {
+      isMounted = false; // Cleanup to avoid memory leaks
+    };
   }, [id]);
 
-  if (loading)
+  if (loading) {
     return (
-      <p className='text-center mt-10 text-lg'>Loading sitter details...</p>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6'>
+        {Array(6)
+          .fill(null)
+          .map((_, index) => (
+            <div
+              key={index}
+              className='animate-pulse bg-gray-300 h-40 rounded-lg'
+            ></div>
+          ))}
+      </div>
     );
-  if (error) return <p className='text-red-500 text-center mt-10'>{error}</p>;
-  if (!sitter) return <p className='text-center mt-10'>No sitter found.</p>;
+  }
+
+  if (!sitter) {
+    return (
+      <p className='text-center text-gray-600 mt-10'>
+        No sitters found. Check back later!
+      </p>
+    );
+  }
+
+  if (error)
+    return (
+      <div className='text-center mt-10'>
+        <p className='text-red-500 text-lg'>{error}</p>
+        <button onClick={() => setError(null)} className='...'>
+          Try Again
+        </button>
+      </div>
+    );
 
   return (
     <div className='max-w-3xl mx-auto p-8 bg-[var(--color-white)] shadow-lg rounded-lg'>
-      {/* Profile Image */}
-      <img
-        // Uncomment and set the source if sitter.profileImage is available
-        // src={sitter.profileImage}
-        alt={sitter.firstName}
-        className='w-32 h-32 rounded-full mx-auto mb-4 object-cover'
-      />
+      <div className='flex justify-center'>
+        <img
+          src='/images/profile-placeholder.jpg'
+          alt={`${sitter.firstName}`}
+          className='w-40 h-40 object-cover border border-gray-300'
+        />
+      </div>
       <h1 className='text-2xl font-bold text-center text-[var(--color-primary)]'>
         {sitter.firstName} {sitter.lastName}
       </h1>
+      <p className='text-gray-700 mt-4 text-center'>{sitter.email}</p>
       <p className='text-gray-700 mt-4 text-center'>{sitter.bio}</p>
       <p className='text-yellow-500 mt-2 font-bold text-center'>
         ⭐ {sitter.rating}
@@ -64,12 +96,13 @@ export default function SitterProfile() {
             onClose={() => setShowBookingForm(false)}
           />
         ) : (
-          <button
-            onClick={() => setShowBookingForm(true)}
-            className='w-full py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-accent)] transition-colors'
-          >
-            Make a Booking
-          </button>
+          <div className='flex justify-center'>
+            <button
+              onClick={() => setShowBookingForm(true)}
+              className="py-2 px-6 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-accent)] transition-colors"            >
+              Make a Booking
+            </button>
+          </div>
         )}
       </div>
     </div>

@@ -2,10 +2,11 @@ export interface Sitter {
   sitterId: string;
   firstName: string;
   lastName: string;
-  email: string;
   bio: string;
+  email: string;
   rating: number;
-};
+  profileImage?: string; // Optional, for future DB updates
+}
 
 export interface SitterContextType {
   isSitter: boolean;
