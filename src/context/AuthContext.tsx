@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import React, {
   createContext,
@@ -24,29 +24,40 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
 
   const router = useRouter();
 
+  const getProfileInfo = async () => {
+    return apiRequest('/users/profile')
+      .then((data) => {
+        setUser(data.user);
+      })
+      .catch((error) => {
+        console.error('Error fetching profile:', error);
+        localStorage.removeItem('token');
+      })
+      .finally(() => setLoading(false));
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      apiRequest('/users/profile')
-        .then((data) => {
-          setUser(data.user);
-        })
-        .catch((error) => {
-          console.error('Error fetching profile:', error);
-          localStorage.removeItem('token');
-        })
-        .finally(() => setLoading(false));
+      const getProfile = async () => {
+        await getProfileInfo();
+      };
+      getProfile();
     } else {
       setLoading(false);
     }
   }, []);
 
-  const login = async (credentials: { email: string; password: string }): Promise<void> => {
+  const login = async (credentials: {
+    email: string;
+    password: string;
+  }): Promise<void> => {
     setLoading(true);
     try {
       const data = await apiRequest('/users/login', 'POST', credentials);
       if (data.token) {
         localStorage.setItem('token', data.token);
+        await getProfileInfo();
         router.push('/profile');
       } else {
         router.push('/auth/login');
@@ -79,4 +90,3 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
-

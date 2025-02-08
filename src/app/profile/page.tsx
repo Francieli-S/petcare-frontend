@@ -17,7 +17,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/auth/login"); // Redirect to login if user is not authenticated
+      router.push("/auth/signin"); // Redirect to login if user is not authenticated
     }
   }, [user, loading, router, isSitter, sitterData]);
 
