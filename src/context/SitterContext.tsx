@@ -11,11 +11,9 @@ interface SitterProviderProps {
 const SitterContext = createContext<SitterContextType | undefined>(undefined);
 
 export function SitterProvider({ children }: SitterProviderProps) {
-  console.log('RUNNING SITTER CONTEXT');
   const { user, loading } = useAuth();
   const [isSitter, setIsSitter] = useState<boolean>(false);
   const [sitterData, setSitterData] = useState<any | null>(null);
-  console.log('USER LOGGED IN: ', user);
 
   // This function calls the /sitters endpoint and checks if the logged‑in user has a sitter profile.
   const refreshSitterStatus = async () => {
@@ -26,10 +24,8 @@ export function SitterProvider({ children }: SitterProviderProps) {
     }
     try {
       const data = await apiRequest("/sitters/profile");
-      console.log('CALLING SITTERS/PROFILE');
       // Assume the response is like { sitters: [ ... ] }
       if (data.sitter) {
-        console.log('RETURNING SITTER PROFILE: ', data);
         // if data it means that the user logged is also a sitter,
         // otherwise it returns sitter not found.
           setIsSitter(true);
@@ -46,7 +42,6 @@ export function SitterProvider({ children }: SitterProviderProps) {
   // When the user changes (or finishes loading), refresh the sitter status.
   useEffect(() => {
     if (!loading && user) {
-      console.log('IS REFRESHING SITTER STATUS');
       refreshSitterStatus();
     }
   }, [user, loading]);

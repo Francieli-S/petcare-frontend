@@ -17,10 +17,6 @@ export default function BookingsPage() {
       try {
         setLoading(true);
         const data = await apiRequest('/bookings/');
-        console.log(
-          'BOOKINGS with sitter: ',
-          data.bookings[0].sitter.firstName
-        );
         if (isMounted) {
           setBookings(data.bookings);
         }
@@ -39,14 +35,35 @@ export default function BookingsPage() {
       isMounted = false;
     };
   }, []);
-  console.log('BOOKINGS STATE: ', bookings);
 
-  if (loading)
-    return <p className='text-center mt-10 text-lg'>Loading bookings...</p>;
+  if (loading) {
+    return (
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6'>
+        {Array(6)
+          .fill(null)
+          .map((_, index) => (
+            <div
+              key={index}
+              className='animate-pulse bg-gray-300 h-40 rounded-lg'
+            ></div>
+          ))}
+      </div>
+    );
+  }
+  if (!loading && bookings.length === 0) {
+    return (
+      <p className='text-center text-gray-600 mt-10'>No bookings found!</p>
+    );
+  }
   if (error)
-    return <p className='text-red-500 text-center mt-10 text-lg'>{error}</p>;
-  if (bookings.length === 0)
-    return <p className='text-center mt-10 text-lg'>No bookings found.</p>;
+    return (
+      <div className='text-center mt-10'>
+        <p className='text-red-500 text-lg'>{error}</p>
+        <button onClick={() => setError(null)} className='...'>
+          Try Again
+        </button>
+      </div>
+    );
 
   return (
     <div className='max-w-4xl mx-auto p-6'>
@@ -59,9 +76,6 @@ export default function BookingsPage() {
             key={booking.bookingId}
             bookingId={booking.bookingId}
             status={booking.status}
-            serviceType={booking.serviceType}
-            numberOfDays={booking.numberOfDays}
-            totalCost={booking.totalCost}
             sitter={booking.sitter}
           />
         ))}

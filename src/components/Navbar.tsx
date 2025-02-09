@@ -1,33 +1,35 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <nav className='bg-[var(--color-white)] shadow-md'>
-      <div className='container mx-auto flex items-center justify-between p-4'>
+    <nav className="fixed top-0 left-0 w-full bg-[var(--color-white)] shadow-md z-50">
+      <div className="container mx-auto flex items-center justify-between p-4">
         {/* Logo */}
-        <div className='logo font-bold text-2xl text-[var(--color-primary)]'>
-          <Link href='/'>PetCare</Link>
+        <div className="logo font-bold text-2xl text-[var(--color-primary)]">
+          <Link href="/" className="no-underline">
+            PetCare
+          </Link>
         </div>
 
         {/* Navigation Links */}
-        <ul className='flex space-x-6 items-center'>
+        <ul className="flex space-x-6 items-center">
           <li>
             <Link
-              href='/'
-              className='text-gray-700 hover:text-[var(--color-accent)] transition-colors'
+              href="/"
+              className="text-gray-700 no-underline hover:text-[var(--color-accent)] transition-colors hover:scale-105 transform"
             >
               Home
             </Link>
           </li>
           <li>
             <Link
-              href='/sitters'
-              className='text-gray-700 hover:text-[var(--color-accent)] transition-colors'
+              href="/sitters"
+              className="text-gray-700 no-underline hover:text-[var(--color-accent)] transition-colors hover:scale-105 transform"
             >
               Find a Sitter
             </Link>
@@ -36,8 +38,8 @@ export default function Navbar() {
             <>
               <li>
                 <Link
-                  href='/profile'
-                  className='text-gray-700 hover:text-[var(--color-accent)] transition-colors'
+                  href="/profile"
+                  className="text-gray-700 no-underline hover:text-[var(--color-accent)] transition-colors hover:scale-105 transform"
                 >
                   My Profile
                 </Link>
@@ -45,7 +47,7 @@ export default function Navbar() {
               <li>
                 <button
                   onClick={logout}
-                  className='text-gray-700 hover:text-[var(--color-accent)] transition-colors'
+                  className="text-gray-700 no-underline hover:text-[var(--color-accent)] transition-colors hover:scale-105 transform"
                 >
                   Logout
                 </button>
@@ -55,16 +57,16 @@ export default function Navbar() {
             <>
               <li>
                 <Link
-                  href='/auth/signin'
-                  className='text-gray-700 hover:text-[var(--color-accent)] transition-colors'
+                  href="/auth/signin"
+                  className="text-gray-700 no-underline hover:text-[var(--color-accent)] transition-colors hover:scale-105 transform"
                 >
                   Sign in
                 </Link>
               </li>
               <li>
                 <Link
-                  href='/auth/signup'
-                  className='text-gray-700 hover:text-[var(--color-accent)] transition-colors'
+                  href="/auth/signup"
+                  className="text-gray-700 no-underline hover:text-[var(--color-accent)] transition-colors hover:scale-105 transform"
                 >
                   Sign up
                 </Link>
@@ -76,3 +78,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

@@ -21,19 +21,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
   const router = useRouter();
 
-  const getProfileInfo = async () => {
-    return apiRequest('/users/profile')
-      .then((data) => {
+  const getProfileInfo = async (): Promise<void> => {
+    try {
+      const data = await apiRequest("/users/profile");
+      if (data.user) {
         setUser(data.user);
-      })
-      .catch((error) => {
-        console.error('Error fetching profile:', error);
-        localStorage.removeItem('token');
-      })
-      .finally(() => setLoading(false));
+      } else {
+        localStorage.removeItem("token");
+      }
+    } catch (error) {
+      localStorage.removeItem("token");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -61,7 +63,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
         router.push('/profile');
       } else {
         router.push('/auth/login');
-        throw new Error('No token returned from login endpoint');
+        throw new Error('Registration failed: No token returned.');
       }
     } catch (error) {
       console.error('Login error:', error);

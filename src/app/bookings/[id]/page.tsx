@@ -15,19 +15,24 @@ export default function BookingDetailsPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
+  const [updating, setUpdating] = useState(false); // Track status update loading
 
-  console.log('BOOKING ID:', id);
+  // 🔹 Status Badge Styles
+  const statusStyles: Record<string, string> = {
+    Pending: 'bg-yellow-100 text-yellow-700',
+    Canceled: 'bg-red-100 text-red-700',
+    Accepted: 'bg-green-100 text-green-700',
+    Completed: 'bg-blue-100 text-blue-700',
+  };
 
   useEffect(() => {
     if (!id) return;
-
     let isMounted = true;
 
     const fetchBooking = async () => {
       try {
         setLoading(true);
         const data = await apiRequest(`/bookings/${id}`);
-        console.log('BOOKING BY ID:', data.booking);
         if (isMounted) {
           setBooking(data.booking);
         }
@@ -43,46 +48,55 @@ export default function BookingDetailsPage() {
     };
 
     fetchBooking();
-
     return () => {
       isMounted = false;
     };
   }, [id]);
 
   const handleUpdateStatus = async (newStatus: string) => {
-    if (!booking) return;
-console.log('NEW STATUS: ', newStatus);
+    if (!booking || updating) return;
+    setUpdating(true);
     try {
       const updatedBooking = await apiRequest(
         `/bookings/sitter/${id}`,
         'PATCH',
-        {
-          // id: booking.bookingId,
-          status: newStatus,
-        }
+        { status: newStatus }
       );
-      console.log('UPDATED BOOKING: ', updatedBooking);
-
       setBooking(updatedBooking.booking);
     } catch (err) {
       console.error('Error updating booking status:', err);
+    } finally {
+      setUpdating(false);
     }
   };
 
   if (loading) {
     return (
-      <p className='text-center mt-10 text-lg text-[var(--color-primary)]'>
-        Loading booking details...
-      </p>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6'>
+        {Array(6)
+          .fill(null)
+          .map((_, index) => (
+            <div
+              key={index}
+              className='animate-pulse bg-gray-300 h-40 rounded-lg'
+            ></div>
+          ))}
+      </div>
     );
   }
 
-  if (error) {
-    return <p className='text-red-500 text-center mt-10 text-lg'>{error}</p>;
-  }
+  if (error)
+    return (
+      <div className='text-center mt-10'>
+        <p className='text-red-500 text-lg'>{error}</p>
+        <button onClick={() => setError(null)} className='btn-primary mt-4'>
+          Try Again
+        </button>
+      </div>
+    );
 
   if (!booking) {
-    return <p className='text-center mt-10 text-lg'>No booking found.</p>;
+    return <p className='text-center text-gray-600 mt-10'>No booking found!</p>;
   }
 
   return (
@@ -91,65 +105,71 @@ console.log('NEW STATUS: ', newStatus);
         Booking Details
       </h1>
 
-      <p className='text-gray-700 mb-4'>
-        <strong>Status:</strong> <br /> {booking.status}
-      </p>
+      <span
+        className={`inline-block px-3 py-1 rounded-lg text-sm font-semibold ${
+          statusStyles[booking.status] || 'bg-gray-100 text-gray-700'
+        }`}
+      >
+        {booking.status}
+      </span>
 
-      <p className='text-gray-700 mb-4'>
-        <strong>Service Type:</strong> <br /> {booking.serviceType}
-      </p>
-
-      <p className='text-gray-700 mb-4'>
-        <strong>Number of Days:</strong> <br /> {booking.numberOfDays}
-      </p>
-
-      <p className='text-gray-700 mb-4'>
-        <strong>Total Cost:</strong> € <br /> {booking.totalCost.toFixed(2)}
-      </p>
-      {!isSitter ? (
-        <p className='text-gray-700 mb-4'>
-          <strong>Sitter:</strong> <br /> {booking.sitter.firstName}
+      <div className='mt-4 space-y-3 text-gray-700'>
+        <p>
+          <strong>Service Type:</strong> <br /> {booking.serviceType}
         </p>
-      ) : (
-        <p className='text-gray-700 mb-4'>
-          <strong>Client:</strong> <br /> {booking.user.firstName}
+        <p>
+          <strong>Number of Days:</strong> <br /> {booking.numberOfDays}
         </p>
+        <p>
+          <strong>Total Cost:</strong> <br /> € {booking.totalCost.toFixed(2)}
+        </p>
+        {!isSitter ? (
+          <p>
+            <strong>Sitter:</strong> <br /> {booking.sitter.firstName}
+          </p>
+        ) : (
+          <p>
+            <strong>Client:</strong> <br /> {booking.user.firstName}
+          </p>
+        )}
+        <p>
+          <strong>Booking Ref:</strong> <br /> {booking.bookingId}
+        </p>
+      </div>
+
+      {isSitter && (
+        <div className='mt-6 space-y-3'>
+          {booking.status === 'Pending' && (
+            <button
+              onClick={() => handleUpdateStatus('Accepted')}
+              className='btn-primary hover:bg-[var(--color-info)] transition duration-300 w-full'
+              disabled={updating}
+            >
+              {updating ? 'Processing...' : 'Accept Booking'}
+            </button>
+          )}
+
+          {booking.status === 'Accepted' && (
+            <button
+              onClick={() => handleUpdateStatus('Completed')}
+              className='btn-primary hover:bg-[var(--color-info)] transition duration-300 w-full'
+              disabled={updating}
+            >
+              {updating ? 'Processing...' : 'Mark as Completed'}
+            </button>
+          )}
+        </div>
       )}
 
-      <p className='mt-2 text-gray-600'>
-        <strong>Booking Ref:</strong> <br /> {booking.bookingId}
-      </p>
-
-      {/* Buttons for Sitters */}
-      {isSitter && booking.status === 'Pending' && (
-        <button
-          onClick={() => handleUpdateStatus('Accepted')}
-          className='btn-primary mt-4 w-full hover:bg-[var(--color-info)] transition duration-300'
-        >
-          Accept Booking
-        </button>
-      )}
-
-      {isSitter && booking.status === 'Accepted' && (
-        <button
-          onClick={() => handleUpdateStatus('Completed')}
-          className='btn-primary mt-4 w-full hover:bg-[var(--color-info)] transition duration-300'
-        >
-          Booking Completed
-        </button>
-      )}
-
-      {/* Button for Users (Non-Sitters) */}
       {!isSitter && (
-        <>
+        <div className='mt-6'>
           <button
             onClick={() => setEditing(true)}
-            className='btn-secondary mt-4 w-full hover:bg-[var(--color-accent)] transition duration-300'
+            className='btn-secondary w-full hover:bg-[var(--color-accent)] transition duration-300'
           >
             Change Booking
           </button>
 
-          {/* Display Booking Form when editing */}
           {editing && (
             <div className='mt-4'>
               <BookingForm
@@ -159,7 +179,7 @@ console.log('NEW STATUS: ', newStatus);
               />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

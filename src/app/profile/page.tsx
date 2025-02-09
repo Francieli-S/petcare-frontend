@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import SitterForm from "../../components/SitterForm";
-import { useSitter } from "@/context/SitterContext";
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import SitterForm from '../../components/SitterForm';
+import { useSitter } from '@/context/SitterContext';
+import Link from 'next/link';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
@@ -12,18 +13,15 @@ export default function ProfilePage() {
   const router = useRouter();
   const [showSitterForm, setShowSitterForm] = useState(false);
 
-  console.log("IS SITTER: ", isSitter);
-  console.log("SITTER DATA: ", sitterData);
-
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/auth/signin"); // Redirect to login if user is not authenticated
+      router.push('/auth/signin');
     }
   }, [user, loading, router, isSitter, sitterData]);
 
   if (loading) {
     return (
-      <p className="text-center mt-10 text-lg text-[var(--color-primary)]">
+      <p className='text-center mt-10 text-lg text-[var(--color-primary)]'>
         Loading...
       </p>
     );
@@ -32,82 +30,114 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <main className="container mt-10">
-      {/* Profile Card */}
-      <div className="card">
-        <h1 className="text-3xl font-bold">Welcome, {user.firstName}!</h1>
-
-        {/* User Dashboard */}
-        <section className="mt-6">
-          <h2 className="text-xl font-semibold">Your Dashboard</h2>
-          <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-700">
-            <li>
-              📅{" "}
-              <a href="/bookings" className="hover:text-[var(--color-accent)]">
-                My Bookings
-              </a>
-            </li>
-            <li>
-              🐶{" "}
-              <a href="/pets" className="hover:text-[var(--color-accent)]">
-                My Pets
-              </a>
-            </li>
-            <li>
-              ❤️{" "}
-              <a href="/favorites" className="hover:text-[var(--color-accent)]">
-                My Favorite Sitters
-              </a>
-            </li>
-          </ul>
+    <main className='container mt-10'>
+      <div className='bg-white p-8 shadow-lg rounded-lg'>
+        <h1 className='text-3xl font-bold text-[var(--color-primary)]'>
+          Welcome, {user.firstName}!
+        </h1>
+        <section className='mt-6 space-y-3'>
+          <h2 className='text-xl font-semibold text-gray-800'>
+            Your Dashboard
+          </h2>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2'>
+            <Link
+              href='/bookings'
+              className='block bg-gray-100 p-4 rounded-lg transition
+              no-underline hover:no-underline'
+            >
+              {' '}
+              📅 My Bookings
+            </Link>
+            <Link
+              href='/pets'
+              className='block bg-gray-100 p-4 rounded-lg transition
+              no-underline hover:no-underline'
+            >
+              {' '}
+              🐶 My Pets
+            </Link>
+            <Link
+              href='/favorites'
+              className='block bg-gray-100 p-4 rounded-lg transition
+              no-underline hover:no-underline'
+            >
+              {' '}
+              ❤️ My Favorite Sitters
+            </Link>
+            <Link
+              href='/payment-settings'
+              className='block bg-gray-100 p-4 rounded-lg transition
+              no-underline hover:no-underline'
+            >
+              {' '}
+              💳 Payment Settings
+            </Link>
+            <Link
+              href='/settings'
+              className='block bg-gray-100 p-4 rounded-lg transition
+              no-underline hover:no-underline'
+            >
+              {' '}
+              ⚙️ General Settings
+            </Link>
+          </div>
         </section>
-
-        {/* Sitter Dashboard (Visible only for sitters) */}
         {isSitter && (
-          <section className="mt-6">
-            <h2 className="text-xl font-semibold">Sitter Dashboard</h2>
-            <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-700">
-              <li>
-                🐾{" "}
-                <a href="/clients" className="hover:text-[var(--color-accent)]">
-                  My Clients
-                </a>
-              </li>
-              <li>
-                ⭐{" "}
-                <a href="/reviews" className="hover:text-[var(--color-accent)]">
-                  My Reviews
-                </a>
-              </li>
-              <li>
-                📝{" "}
-                <a
-                  href="/sitter-bio"
-                  className="hover:text-[var(--color-accent)]"
-                >
-                  My Bio
-                </a>
-              </li>
-            </ul>
+          <section className='mt-6 space-y-3'>
+            <h2 className='text-xl font-semibold text-gray-800'>
+              Sitter Dashboard
+            </h2>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2'>
+              <Link
+                href='/clients'
+                className='block bg-gray-100 p-4 rounded-lg transition
+                no-underline hover:no-underline'
+              >
+                {' '}
+                🐾 My Clients
+              </Link>
+              <Link
+                href='/reviews'
+                className='block bg-gray-100 p-4 rounded-lg transition
+                no-underline hover:no-underline'
+              >
+                {' '}
+                ⭐ My Reviews
+              </Link>
+              <Link
+                href='/sitter-bio'
+                className='block bg-gray-100 p-4 rounded-lg transition
+                no-underline hover:no-underline'
+              >
+                {' '}
+                📝 My Bio
+              </Link>
+              <Link
+                href='/earnings'
+                className='block bg-gray-100 p-4 rounded-lg transition
+                no-underline hover:no-underline'
+              >
+                {' '}
+                💰 My Earnings
+              </Link>
+            </div>
           </section>
         )}
-
-        {/* Become a Sitter Section */}
         {!isSitter && (
-          <section className="mt-8">
+          <section className='mt-8'>
             <button
               onClick={() => setShowSitterForm((prev) => !prev)}
-              className="btn-primary w-full hover:bg-[var(--color-accent)] transition duration-300"
+              className='btn-primary hover:bg-[var(--color-accent)] transition duration-300'
             >
-              {showSitterForm ? "Hide Sitter Form" : "Become a Sitter"}
+              {showSitterForm ? 'Hide Sitter Form' : 'Become a Sitter'}
             </button>
 
             {showSitterForm && (
-              <div className="mt-4">
+              <div className='mt-4'>
                 <SitterForm
                   onClose={async () => {
                     setShowSitterForm(false);
-                    await refreshSitterStatus(); // Refresh global sitter state after submission
+                    await refreshSitterStatus(); // Refresh sitter status
                   }}
                 />
               </div>
@@ -118,5 +148,3 @@ export default function ProfilePage() {
     </main>
   );
 }
-
-

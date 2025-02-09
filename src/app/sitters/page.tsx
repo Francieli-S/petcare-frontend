@@ -52,7 +52,7 @@ export default function SittersPage() {
   if (!loading && sitters.length === 0) {
     return (
       <p className='text-center text-gray-600 mt-10'>
-        No sitters found. Check back later!
+        No sitters found!
       </p>
     );
   }
