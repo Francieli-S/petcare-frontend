@@ -77,6 +77,7 @@ export default function BookingsPage() {
             bookingId={booking.bookingId}
             status={booking.status}
             sitter={booking.sitter}
+            user={booking.user}
           />
         ))}
       </div>
